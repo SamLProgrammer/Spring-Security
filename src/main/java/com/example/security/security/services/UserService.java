@@ -2,7 +2,8 @@ package com.example.security.security.services;
 
 import java.util.ArrayList;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.security.security.dto.CreateUserPayload;
@@ -20,19 +21,22 @@ public class UserService {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private RoleAssignmentRepository roleAssignmentRepository;
+    private PasswordEncoder passwordEncoder;
 
     public UserService(UserRepository userRepository,
             RoleRepository roleRepository,
-            RoleAssignmentRepository roleAssignmentRepository) {
+            RoleAssignmentRepository roleAssignmentRepository, 
+            PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.roleAssignmentRepository = roleAssignmentRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional
     public User createUser(CreateUserPayload createUserPayload) {
         User payloadUser = createUserPayload.getUser();
-        payloadUser.setPassword(new BCryptPasswordEncoder().encode(payloadUser.getPassword()));
+        payloadUser.setPassword(passwordEncoder.encode(payloadUser.getPassword()));
         User createdUser = userRepository.save(payloadUser);
 
         ArrayList<String> rolesList = createUserPayload.getRoles();
