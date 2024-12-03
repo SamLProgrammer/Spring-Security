@@ -1,12 +1,16 @@
 package com.example.security.security.services;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.security.security.dto.CreateUserPayload;
+import com.example.security.security.dto.UserWithRoles;
 import com.example.security.security.models.Role;
 import com.example.security.security.models.RoleAssignment;
 import com.example.security.security.models.RoleAssignmentId;
@@ -60,5 +64,23 @@ public class UserService {
 
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    public ArrayList<UserWithRoles> getUsers() {
+        ArrayList<User> allUsersList = userRepository.getAllUsers();
+        HashMap<Integer, User> usersMap = new HashMap<>();
+        for(User u: allUsersList) {
+            usersMap.put(u.getId(), u);
+        }
+
+        ArrayList<UserWithRoles> usersWithRolesList = new ArrayList<UserWithRoles>();
+        List<Map<String, Object>> x = userRepository.findRolesGroupedByUserId(usersMap.keySet());
+        for(Map<String,Object> xmap: x) {
+            usersWithRolesList.add(new UserWithRoles(usersMap.get(xmap.get("user_id")), 
+            String.valueOf(xmap.get("role_names")).split(","))
+            );
+        }
+
+        return usersWithRolesList;
     }
 }

@@ -1,10 +1,7 @@
 package com.example.security.security.models;
 
 import java.util.Set;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -105,5 +102,4 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-
 }

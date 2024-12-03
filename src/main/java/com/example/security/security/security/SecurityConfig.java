@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import com.example.security.security.filters.JWTAuthenticationFilter;
+import com.example.security.security.filters.JWTValidationFilter;
 
 @Configuration
 public class SecurityConfig {
@@ -38,6 +39,7 @@ public class SecurityConfig {
                         .requestMatchers("/users/create").permitAll()
                         .anyRequest().authenticated())
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
+                .addFilter(new JWTValidationFilter(authenticationManager()))
                 .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .build();
     }

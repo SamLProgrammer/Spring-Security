@@ -1,11 +1,10 @@
 package com.example.security.security.filters;
 
 import java.io.IOException;
-import java.security.Key;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-
+import javax.crypto.SecretKey;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,7 +25,7 @@ import jakarta.servlet.http.HttpServletResponse;
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private AuthenticationManager authManager;
-    private Key SIGNATURE_KEY = Jwts.SIG.HS256.key().build();
+    public static final SecretKey SIGNATURE_KEY = Jwts.SIG.HS256.key().build();
 
     public JWTAuthenticationFilter(AuthenticationManager authManager) {
         this.authManager = authManager;
