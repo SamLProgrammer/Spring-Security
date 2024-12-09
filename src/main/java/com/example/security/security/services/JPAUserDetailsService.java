@@ -32,7 +32,8 @@ public class JPAUserDetailsService implements UserDetailsService {
         } else {
             throw new UsernameNotFoundException("Username not found");
         }
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), 
+        return new org.springframework.security.core.userdetails.User(
+        user.getUsername(), 
         user.getPassword(), 
         user.isActive(), 
         true, 

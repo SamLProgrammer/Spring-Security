@@ -5,13 +5,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.security.security.dto.CreateUserPayload;
 import com.example.security.security.dto.UserWithRoles;
-import com.example.security.security.models.User;
 import com.example.security.security.services.UserService;
-import com.example.security.security.validations.JSONValidator;
+import com.example.security.security.utilities.AuthoritiesManager;
 
 import java.util.ArrayList;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,16 +22,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class UserController {
 
     private UserService userService;
-    private JSONValidator jsonValidator;
 
-    public UserController(UserService userService, JSONValidator jsonValidator) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.jsonValidator = jsonValidator;
     }
     
     @PostMapping("/create")
-    public ResponseEntity<?> createUser(@RequestBody CreateUserPayload createUserPayload) {
-        return ResponseEntity.ok().body(userService.createUser(createUserPayload));
+    public ResponseEntity<?> createUser(@RequestBody CreateUserPayload createUserPayload, Authentication authentication) {
+        return ResponseEntity.ok().body(userService.createUser(AuthoritiesManager.extractRoles(authentication), createUserPayload));
     }
 
     @GetMapping("/all")

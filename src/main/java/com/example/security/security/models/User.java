@@ -11,11 +11,11 @@ import jakarta.persistence.OneToMany;
 
 @Entity
 public class User {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    
+
     @Column(unique = true, nullable = false)
     private String username;
     private String email;
@@ -28,7 +28,8 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<RoleAssignment> roleAssignments;
 
-    public User(int id, String username, String email, String firstname, String lastname, boolean active, String password) {
+    public User(int id, String username, String email, String firstname, String lastname, boolean active,
+            String password) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -41,7 +42,6 @@ public class User {
     public User() {
 
     }
-
 
     public int getId() {
         return this.id;
@@ -98,7 +98,7 @@ public class User {
     public String getPassword() {
         return password;
     }
-    
+
     public void setPassword(String password) {
         this.password = password;
     }

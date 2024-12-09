@@ -37,7 +37,8 @@ public class SecurityConfig {
         return http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/users/create").permitAll()
-                        .anyRequest().authenticated())
+                        .anyRequest().authenticated()
+                        )
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
                 .addFilter(new JWTValidationFilter(authenticationManager()))
                 .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
