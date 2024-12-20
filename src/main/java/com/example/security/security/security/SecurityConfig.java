@@ -9,8 +9,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-
-import com.example.security.security.filters.JWTAuthenticationFilter;
 import com.example.security.security.filters.JWTValidationFilter;
 
 @Configuration
@@ -36,12 +34,13 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/users/create").permitAll()
+                        .requestMatchers("/users/create", "/auth/login").permitAll()
                         .anyRequest().authenticated()
                         )
-                .addFilter(new JWTAuthenticationFilter(authenticationManager()))
+                // .addFilter(new JWTAuthenticationFilter(authenticationManager()))
                 .addFilter(new JWTValidationFilter(authenticationManager()))
                 .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .formLogin((formLogin) -> formLogin.disable())
                 .build();
     }
 }
